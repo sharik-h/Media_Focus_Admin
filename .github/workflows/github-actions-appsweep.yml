@@ -2,7 +2,7 @@ name: AppSweep mobile application security testing
 on: push
 jobs:
   upload-app-to-appsweep:
-    runs-on: ubantu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: check out repository code
         uses: actions/chekout@v2
