@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check out repository code
-        uses: actions/chekout@v2
+        uses: actions/checkout@v2
 
       - name: Upload app to app sweep with gradle
         env:
           APPSWEEP_API_KEY: ${{ secrets.APPSWEEP_API_KEY }}
-        run: ./gradle uploadToAppSweepRelease
+        run: ./gradlew uploadToAppSweepRelease
