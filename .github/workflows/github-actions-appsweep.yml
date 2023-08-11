@@ -1,0 +1,13 @@
+name: AppSweep mobile application security testing
+on: [commit_target]
+jobs:
+  upload-app-to-appsweep:
+    runs-on: ubantu-latest
+    steps:
+      - name: check out repository code
+        uses: actions/chekout@v2
+
+      - name: Upload app to app sweep with gradle
+        env:
+          APPSWEEP_API_KEY: ${{ secrets.APPSWEEP_API_KEY }}
+        run: ./gradle uploadToAppSweepRelease

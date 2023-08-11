@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.guardsquare.appsweep") version "1.5.1"
 }
 
 android {
