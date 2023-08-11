@@ -1,5 +1,5 @@
 name: AppSweep mobile application security testing
-on: [commit_target]
+on: push
 jobs:
   upload-app-to-appsweep:
     runs-on: ubantu-latest
