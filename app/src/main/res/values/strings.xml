@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Media Focus Admin</string>
+    <string name="main_page_heading">Admin</string>
+    <string name="main_page_action_desc">add new user</string>
+    <string name="collection_page_heading">Collections</string>
+    <string name="view_all_text">View All</string>
+    <string name="total_text">Total</string>
+    <string name="expense_page_heading">Expense</string>
+    <string name="navigate_up_text">navigate back</string>
+    <string name="paid_group_heading">Paid</string>
+    <string name="un_paid_group_heading">Un-paid</string>
+    <string name="expense_page_action_desc">add new expense</string>
+    <string name="new_user_page_heading">Add new User</string>
+    <string name="save_button_text">Save</string>
 </resources>
