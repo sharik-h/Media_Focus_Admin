@@ -8,39 +8,41 @@ import retrofit2.http.Query
 
 interface Api {
 
-    @GET("jwt/getMyExp")
+    @GET("/getAllExpense")
     suspend fun getAllExp(): List<Expense>
 
-    @GET("jwt/getMyPayments")
+    @GET("/getAllPayment")
     suspend fun getAllPayments(): List<CompactPayments>
 
-    @POST("jwt/sendNewPayment")
+    @POST("sendNewPayment")
     suspend fun sendNewPayment(): Boolean
 
-    @POST("jwt/addNewExp")
+    @POST("/addNewExp")
     suspend fun addNewExp(
         @Query("desc") desc: String,
-        @Query("amount") amount: Int
-    ): Boolean
-
-    @POST("jwt/updateExp")
-    suspend fun updateExp(
-        @Query("id") id: String,
-        @Query("desc") desc: String,
-        @Query("amount") amount: Int
+        @Query("amount") amount: String,
+        @Query("date") date: String
     )
 
-    @POST("jwt/addNewUser")
+    @POST("/updateExp")
+    suspend fun updateExp(
+        @Query("id") id: Int,
+        @Query("desc") desc: String,
+        @Query("amount") amount: String,
+        @Query("date") date: String
+    )
+
+    @POST("/addNewUser")
     suspend fun addNewUser(
         @Query("name") name: String,
         @Query("phone") phone: String,
         @Query("email") email: String,
         @Query("date") date: String,
-    ): Boolean
+    )
 
-    @POST("jwt/updateUser")
+    @POST("/updateAUser")
     suspend fun updateUser(
-        @Query("id") id: String,
+        @Query("id") id: Int,
         @Query("name") name: String,
         @Query("phone") phone: String,
         @Query("email") email: String,
