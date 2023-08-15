@@ -7,8 +7,8 @@ interface Repo {
     suspend fun getAllExp(): List<Expense>
     suspend fun getAllPayments(): List<CompactPayments>
     suspend fun sendNewPayment(): Boolean
-    suspend fun addNewExp(desc: String, amount: Int): Boolean
-    suspend fun updateExp(id: String, desc: String, amount: Int)
+    suspend fun addNewExp(desc: String, amount: String, date: String)
+    suspend fun updateExp(id: Int, desc: String, amount: String, date: String)
     suspend fun addNewUser(name: String, phone: String, email: String, date: String)
-    suspend fun updateUser(id: String, name: String, phone: String, email: String, date: String)
+    suspend fun updateUser(id: Int, name: String, phone: String, email: String, date: String)
 }

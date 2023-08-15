@@ -37,7 +37,7 @@ class mainViewModel @Inject constructor(
     fun addNewExpense() {
         viewModelScope.launch {
             _newExp.value?.let {
-                repo.addNewExp(it.desc, it.amount)
+                repo.addNewExp(it.desc!!, it.amount!!, it.date!!)
             }
         }
     }
@@ -58,7 +58,7 @@ class mainViewModel @Inject constructor(
     fun updateExp() {
         viewModelScope.launch {
             _newExp.value?.let {
-                repo.updateExp(it.id, it.desc, it.amount)
+                repo.updateExp(it.id!!, it.desc!!, it.amount!!, it.date!!)
             }
         }
     }
