@@ -85,6 +85,26 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun updateUser(feildName: String, value: String){
+        _newUser.let {
+            when(feildName){
+                "name" -> it.value = it.value.copy(name = value)
+                "phone" -> it.value = it.value.copy(phone = value)
+                "email" -> it.value = it.value.copy(email = value)
+                "date" -> it.value = it.value.copy(date = value)
+            }
+        }
+    }
+
+    fun updateExp(feildName: String, value: String){
+        _newExp.let {
+            when(feildName){
+                "desc" -> it.value = it.value.copy(desc = value)
+                "amount" -> it.value = it.value.copy(amount = value)
+            }
+        }
+    }
+
     fun sendNewPayment() {
         viewModelScope.launch {
             repo.sendNewPayment()
