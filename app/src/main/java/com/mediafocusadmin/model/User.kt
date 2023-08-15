@@ -1,9 +1,9 @@
 package com.mediafocusadmin.model
 
 data class User(
-    val id: String,
-    val name: String,
-    val phone: String,
-    val email: String,
-    val date: String
+    val id: Int,
+    var name: String,
+    var phone: String,
+    var email: String,
+    var date: String
 )

@@ -1,7 +1,8 @@
 package com.mediafocusadmin.model
 
 data class Expense(
-    val id: String,
-    val desc: String,
-    val amount: Int
+    var id: Int? = 0,
+    var desc: String? = "",
+    var amount: String? = "",
+    var date: String? = ""
 )
