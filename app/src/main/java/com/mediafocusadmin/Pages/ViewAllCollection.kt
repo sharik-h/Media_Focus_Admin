@@ -17,22 +17,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mediafocusadmin.R
+import com.mediafocusadmin.data.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewAllCollections(navController: NavController) {
+fun ViewAllCollections(
+    navController: NavController,
+    viewModel: MainViewModel
+) {
 
-    val listOfPaidCus = listOf(
-        Pair("cus_1", "399"),
-        Pair("cus_2", "299"),
-        Pair("cus_3", "199"),
-        Pair("cus_4", "99")
-    )
+    val allCollections by viewModel.payments.observeAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
@@ -61,11 +62,11 @@ fun ViewAllCollections(navController: NavController) {
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-                items(items = listOfPaidCus) {
+                items(items = allCollections!!) {
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
-                        MediumText(text = it.first)
+                        MediumText(text = it.userId ?: "")
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = it.second)
+                        MediumText(text = it.amount.toString())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                 }
@@ -75,11 +76,11 @@ fun ViewAllCollections(navController: NavController) {
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-                items(items = listOfPaidCus) {
+                items(items = allCollections!!) {
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
-                        MediumText(text = it.first)
+                        MediumText(text = it.userId ?: "")
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = it.second)
+                        MediumText(text = it.amount.toString())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                 }

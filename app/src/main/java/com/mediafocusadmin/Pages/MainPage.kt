@@ -20,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,17 +29,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mediafocusadmin.Navigation.Screen
 import com.mediafocusadmin.R
+import com.mediafocusadmin.data.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPage(navController: NavController) {
+fun MainPage(
+    navController: NavController,
+    viewModel: MainViewModel
+) {
 
-    val listOfPaidCus = listOf(
-        Pair("cus_1", "399"),
-        Pair("cus_2", "299"),
-        Pair("cus_3", "199"),
-        Pair("cus_4", "99")
-    )
+    val payment by viewModel.payments.observeAsState(initial = emptyList())
+    val expense by viewModel.expense.observeAsState(initial = emptyList())
+    val totals = viewModel.calTotal()
 
     Column(modifier =  Modifier.fillMaxSize()) {
         TopAppBar(
@@ -72,21 +75,21 @@ fun MainPage(navController: NavController) {
                 Column( modifier = Modifier.fillMaxSize().padding(top = 20.dp)) {
 //                    Spacer(modifier = Modifier.height(20.dp))
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
-                        MediumText(text = listOfPaidCus.first().first)
+                        MediumText(text = if (payment.size > 0) payment.first().userId.toString() else "")
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = listOfPaidCus.first().second)
+                        MediumText(text = if (payment.size > 0) payment.first().amount.toString() else  "")
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(
-                            text = "+59 more",
+                            text = "+${payment.size - 1}",
                             color = Color.LightGray )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(text = stringResource(id = R.string.total_text))
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = "39999")
+                        MediumText(text = totals.first.toString())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row {
@@ -116,15 +119,17 @@ fun MainPage(navController: NavController) {
             ) {
                 Column( modifier = Modifier.fillMaxSize() ) {
                     Spacer(modifier = Modifier.height(20.dp))
-                    Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
-                        MediumText(text = "cable 30mtr")
-                        Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = "1000")
+                    if (!expense.isNullOrEmpty()){
+                        Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
+                            MediumText(text = expense.first().desc.toString())
+                            Spacer(modifier = Modifier.weight(0.1f))
+                            MediumText(text = if (expense.size > 0) expense.first().amount.toString() else "")
+                        }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(
-                            text = "+59 more",
+                            text = "+ ${expense.size - 1}",
                             color = Color.LightGray
                         )
                     }
@@ -132,7 +137,7 @@ fun MainPage(navController: NavController) {
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(text = stringResource(id = R.string.total_text),)
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = "39999")
+                        MediumText(text = totals.second.toString())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row {
@@ -155,7 +160,7 @@ fun MainPage(navController: NavController) {
             ) {
                 MediumText(text = stringResource(id = R.string.total_text),)
                 Spacer(modifier = Modifier.weight(0.1f))
-                MediumText(text = "1000")
+                MediumText(text = totals.third.toString())
             }
         }
     }

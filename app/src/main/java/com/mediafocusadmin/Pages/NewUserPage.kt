@@ -18,23 +18,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mediafocusadmin.R
+import com.mediafocusadmin.data.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewUserPage(navController: NavController) {
+fun NewUserPage(navController: NavController, viewModel: MainViewModel) {
 
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") }
+    val user by viewModel.newUser.observeAsState()
 
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -58,29 +54,29 @@ fun NewUserPage(navController: NavController) {
             .padding(20.dp)) {
 
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+                value = user?.name ?: "",
+                onValueChange = { viewModel.updateUser("name", it) },
                 textStyle = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = user?.email ?: "",
+                onValueChange = { viewModel.updateUser("email", it) },
                 textStyle = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
-                value = phone,
-                onValueChange = { phone = it },
+                value = user?.phone ?: "",
+                onValueChange = { viewModel.updateUser("phone", it) },
                 textStyle = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
-                value = date,
-                onValueChange = { date = it},
+                value = user?.date ?: "",
+                onValueChange = { viewModel.updateUser("date", it)},
                 textStyle = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.fillMaxWidth()
             )

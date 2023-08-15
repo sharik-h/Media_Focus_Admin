@@ -7,24 +7,28 @@ import com.mediafocusadmin.Pages.MainPage
 import com.mediafocusadmin.Pages.NewUserPage
 import com.mediafocusadmin.Pages.ViewAllCollections
 import com.mediafocusadmin.Pages.ViewAllExp
+import com.mediafocusadmin.data.MainViewModel
 
 @Composable
-fun NavHost(navHostController: NavHostController) {
+fun NavHost(
+    navHostController: NavHostController,
+    viewModel: MainViewModel
+) {
     androidx.navigation.compose.NavHost(
         navController = navHostController,
         startDestination = Screen.mainPage.route
     ) {
         composable(route = Screen.mainPage.route){
-            MainPage(navController = navHostController)
+            MainPage(navController = navHostController, viewModel = viewModel)
         }
         composable(route = Screen.newUserPage.route){
-            NewUserPage(navController = navHostController)
+            NewUserPage(navController = navHostController, viewModel = viewModel)
         }
         composable(route = Screen.viewAllCollectionPage.route){
-            ViewAllCollections(navController = navHostController)
+            ViewAllCollections(navController = navHostController, viewModel = viewModel)
         }
         composable(route = Screen.viewAllExpPage.route){
-            ViewAllExp(navController = navHostController)
+            ViewAllExp(navController = navHostController, viewModel = viewModel)
         }
     }
 }
