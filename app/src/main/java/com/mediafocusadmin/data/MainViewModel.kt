@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class mainViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val repo: RepoImpl
 ) : ViewModel() {
 
@@ -37,7 +37,7 @@ class mainViewModel @Inject constructor(
         getMyDetails()
     }
 
-    fun getMyDetails() {
+    private fun getMyDetails() {
         viewModelScope.launch {
             _payments.value = repo.getAllPayments()
             _expense.value = repo.getAllExp()
