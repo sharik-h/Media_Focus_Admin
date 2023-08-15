@@ -40,7 +40,9 @@ fun MainPage(
 
     val payment by viewModel.payments.observeAsState(initial = emptyList())
     val expense by viewModel.expense.observeAsState(initial = emptyList())
-    val totals = viewModel.calTotal()
+    val totalBal by viewModel.totalBal
+    val totalExp by viewModel.totalExp
+    val totalPay by viewModel.totalPay
 
     Column(modifier =  Modifier.fillMaxSize()) {
         TopAppBar(
@@ -72,7 +74,9 @@ fun MainPage(
                 shape = RoundedCornerShape(15),
                 shadowElevation = 3.dp
             ) {
-                Column( modifier = Modifier.fillMaxSize().padding(top = 20.dp)) {
+                Column( modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 20.dp)) {
 //                    Spacer(modifier = Modifier.height(20.dp))
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(text = if (payment.size > 0) payment.first().userId.toString() else "")
@@ -89,7 +93,7 @@ fun MainPage(
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(text = stringResource(id = R.string.total_text))
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = totals.first.toString())
+                        MediumText(text = totalPay.toString())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row {
@@ -137,7 +141,7 @@ fun MainPage(
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
                         MediumText(text = stringResource(id = R.string.total_text),)
                         Spacer(modifier = Modifier.weight(0.1f))
-                        MediumText(text = totals.second.toString())
+                        MediumText(text = totalExp.toString())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Row {
@@ -160,7 +164,7 @@ fun MainPage(
             ) {
                 MediumText(text = stringResource(id = R.string.total_text),)
                 Spacer(modifier = Modifier.weight(0.1f))
-                MediumText(text = totals.third.toString())
+                MediumText(text = totalBal.toString())
             }
         }
     }
