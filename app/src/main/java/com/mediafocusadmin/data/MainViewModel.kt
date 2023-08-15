@@ -71,7 +71,7 @@ class MainViewModel @Inject constructor(
                     name = it.name,
                     phone = it.phone,
                     email = it.email,
-                    date = it.date
+                    date = LocalDate.now().toString()
                 )
             }
         }
@@ -113,6 +113,21 @@ class MainViewModel @Inject constructor(
                 _expense.value = repo.getAllExp()
                 calTotal()
             }
+        }
+    }
+
+    fun isNewUserOk(): Boolean {
+        return     _newUser.value.name != ""
+                && _newUser.value.phone != ""
+                && _newUser.value.email != ""
+    }
+
+    fun clearNewUser() {
+        _newUser.let {
+            it.value = it.value.copy(name = "")
+            it.value = it.value.copy(phone = "")
+            it.value = it.value.copy(email = "")
+            it.value = it.value.copy(date = "")
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,7 +29,7 @@ import com.mediafocusadmin.data.MainViewModel
 @Composable
 fun NewUserPage(navController: NavController, viewModel: MainViewModel) {
 
-    val user by viewModel.newUser.observeAsState()
+    val user by viewModel.newUser
 
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -57,6 +56,7 @@ fun NewUserPage(navController: NavController, viewModel: MainViewModel) {
                 value = user?.name ?: "",
                 onValueChange = { viewModel.updateUser("name", it) },
                 textStyle = MaterialTheme.typography.labelMedium,
+                placeholder = { MediumText(text = "Name")},
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -64,6 +64,7 @@ fun NewUserPage(navController: NavController, viewModel: MainViewModel) {
                 value = user?.email ?: "",
                 onValueChange = { viewModel.updateUser("email", it) },
                 textStyle = MaterialTheme.typography.labelMedium,
+                placeholder = { MediumText(text = "E-mail")},
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -71,6 +72,7 @@ fun NewUserPage(navController: NavController, viewModel: MainViewModel) {
                 value = user?.phone ?: "",
                 onValueChange = { viewModel.updateUser("phone", it) },
                 textStyle = MaterialTheme.typography.labelMedium,
+                placeholder = { MediumText(text = "Phone")},
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -78,14 +80,25 @@ fun NewUserPage(navController: NavController, viewModel: MainViewModel) {
                 value = user?.date ?: "",
                 onValueChange = { viewModel.updateUser("date", it)},
                 textStyle = MaterialTheme.typography.labelMedium,
+                placeholder = { MediumText(text = "Date")},
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { navController.navigateUp() },
+                onClick = {
+                    if (viewModel.isNewUserOk()){
+                        viewModel.addNewUser()
+                    }
+                    viewModel.clearNewUser()
+                    navController.navigateUp()
+                          },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MediumText(text = stringResource(id = R.string.save_button_text))
+                if(viewModel.isNewUserOk()){
+                    MediumText(text = stringResource(id = R.string.save_button_text))
+                }else {
+                    MediumText(text = stringResource(id = R.string.cancel_text))
+                }
             }
         }
     }

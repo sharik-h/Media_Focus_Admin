@@ -13,4 +13,5 @@
     <string name="new_user_page_heading">Add new User</string>
     <string name="save_button_text">Save</string>
     <string name="delete_text">Delete</string>
+    <string name="cancel_text">Cancel</string>
 </resources>
