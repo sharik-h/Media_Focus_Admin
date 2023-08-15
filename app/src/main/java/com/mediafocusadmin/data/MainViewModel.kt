@@ -105,4 +105,13 @@ class MainViewModel @Inject constructor(
     fun isNewExpOk(): Boolean {
       return  _newExp.value.desc != "" && newExp.value.amount != ""
     }
+
+    fun deleteExp(id: Int) {
+        viewModelScope.launch {
+            if (repo.deleteExp(id)){
+                _expense.value = repo.getAllExp()
+                calTotal()
+            }
+        }
+    }
 }

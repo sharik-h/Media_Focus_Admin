@@ -54,4 +54,10 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
             api.updateUser(id = id, name = name, phone = phone, email = email, date = date)
         }
     }
+
+    override suspend fun deleteExp(id: Int): Boolean {
+        return withContext(Dispatchers.IO){
+            api.deleteExp(id = id).toString() == "1"
+        }
+    }
 }

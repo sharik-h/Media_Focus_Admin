@@ -11,4 +11,5 @@ interface Repo {
     suspend fun updateExp(id: Int, desc: String, amount: String, date: String)
     suspend fun addNewUser(name: String, phone: String, email: String, date: String)
     suspend fun updateUser(id: Int, name: String, phone: String, email: String, date: String)
+    suspend fun deleteExp(id: Int): Boolean
 }

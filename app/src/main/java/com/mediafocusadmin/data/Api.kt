@@ -2,6 +2,7 @@ package com.mediafocusadmin.data
 
 import com.mediafocusadmin.model.CompactPayments
 import com.mediafocusadmin.model.Expense
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -48,5 +49,8 @@ interface Api {
         @Query("email") email: String,
         @Query("date") date: String,
     )
+
+    @DELETE("/removeExp")
+    suspend fun deleteExp(@Query("id") id: Int): Int
 
 }

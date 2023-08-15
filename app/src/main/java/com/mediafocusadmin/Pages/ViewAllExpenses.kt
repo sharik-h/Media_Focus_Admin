@@ -1,6 +1,7 @@
 package com.mediafocusadmin.Pages
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -34,14 +36,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mediafocusadmin.R
 import com.mediafocusadmin.data.MainViewModel
@@ -121,13 +123,55 @@ fun ViewAllExp(
         }
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 80.dp)) {
+            .padding(top = 20.dp, bottom = 80.dp)) {
             LazyColumn{
-                items(items = allExp!!) {
-                    Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
-                        Text(text = it.desc.toString(), fontFamily = FontFamily(Font(R.font.quicksand)), fontSize = 18.sp)
-                        Spacer(modifier = Modifier.weight(0.1f))
-                        Text(text = it.amount.toString(), fontFamily = FontFamily(Font(R.font.quicksand)), fontSize = 18.sp)
+                items(items = allExp!!) {item ->
+                    var open by remember { mutableStateOf(false) }
+                    if (open){
+                        Surface(
+                            shadowElevation = 3.dp,
+                            modifier = Modifier
+                                .pointerInput(Unit) {
+                                    detectTapGestures(onTap = { open = false })
+                                }
+                                .padding(10.dp),
+                            shape = RoundedCornerShape(10)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                                .padding(10.dp)) {
+                                MediumText(text = item.desc.toString())
+                                Spacer(modifier = Modifier.weight(0.3f))
+                                MediumText(text = item.amount.toString())
+                                Spacer(modifier = Modifier.weight(0.1f))
+                                IconButton(onClick = {
+                                    viewModel.deleteExp(item.id!!)
+                                    open = false
+                                }) {
+                                    Image(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = stringResource(id = R.string.delete_text)
+                                    )
+                                }
+                            }
+                        }
+                    }else {
+                        Row(
+                            modifier = Modifier
+                                .pointerInput(Unit) {
+                                    detectTapGestures(onLongPress = { open = true })
+                                }
+                                .padding(horizontal = 20.dp)
+                        ) {
+                            MediumText(text = item.desc.toString())
+                            Spacer(modifier = Modifier.weight(0.1f))
+                            MediumText(text = item.date.toString(), color = Color.LightGray)
+                            Spacer(modifier = Modifier.weight(0.1f))
+                            MediumText(text = item.amount.toString())
+                        }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                 }

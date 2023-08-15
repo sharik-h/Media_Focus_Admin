@@ -12,4 +12,5 @@
     <string name="expense_page_action_desc">add new expense</string>
     <string name="new_user_page_heading">Add new User</string>
     <string name="save_button_text">Save</string>
+    <string name="delete_text">Delete</string>
 </resources>
