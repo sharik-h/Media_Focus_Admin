@@ -33,6 +33,10 @@ class mainViewModel @Inject constructor(
     val totalPay = _totalPay
 
 
+    init {
+        getMyDetails()
+    }
+
     fun getMyDetails() {
         viewModelScope.launch {
             _payments.value = repo.getAllPayments()
