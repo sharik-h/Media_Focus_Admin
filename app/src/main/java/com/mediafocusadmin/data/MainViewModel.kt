@@ -115,4 +115,19 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun isNewUserOk(): Boolean {
+        return     _newUser.value.name != ""
+                && _newUser.value.phone != ""
+                && _newUser.value.email != ""
+    }
+
+    fun clearNewUser() {
+        _newUser.let {
+            it.value = it.value.copy(name = "")
+            it.value = it.value.copy(phone = "")
+            it.value = it.value.copy(email = "")
+            it.value = it.value.copy(date = "")
+        }
+    }
 }
