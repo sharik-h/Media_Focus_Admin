@@ -56,6 +56,7 @@ fun ViewAllExp(
     var isNewOpen by remember { mutableStateOf(false) }
     val newExp by viewModel.newExp
     val allExp by viewModel.expense.observeAsState(initial = emptyList())
+    val totalExp by viewModel.totalExp
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
@@ -72,33 +73,55 @@ fun ViewAllExp(
                     )
                 } },
             actions = {
-                IconButton(onClick = { isNewOpen = !isNewOpen }) {
+                IconButton(onClick = {
+                    if (viewModel.isNewExpOk()) { viewModel.addNewExpense() }
+                    isNewOpen = !isNewOpen
+                    println(viewModel.expense.value.toString())
+                }
+                ) {
                     Image(
-                        imageVector = Icons.Default.AddCircle,
+                        imageVector = if(isNewOpen && viewModel.isNewExpOk())Icons.Default.CheckCircle
+                                      else if(!isNewOpen) Icons.Default.AddCircle
+                                      else Icons.Default.Close,
                         contentDescription = stringResource(id = R.string.expense_page_action_desc)
                     )
                 }
             }
         )
-        Row {
-            if (isNewOpen){
-                OutlinedTextField(
-                    value = desc,
-                    onValueChange = { desc = it },
-                    modifier = Modifier.weight(0.6f)
-                )
-                Spacer(modifier = Modifier.weight(0.1f))
-                OutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    modifier = Modifier.weight(0.3f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+        if (isNewOpen){
+        Surface(
+            shadowElevation = 3.dp,
+            modifier = Modifier.padding(10.dp),
+            shape = RoundedCornerShape(10)
+        ) {
+            Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)) {
+
+                    OutlinedTextField(
+                        value = newExp?.desc ?: "",
+                        onValueChange = { viewModel.updateExp("desc", it) },
+                        modifier = Modifier.weight(0.6f),
+                        placeholder = { MediumText(text = "Description")},
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                    )
+                    Spacer(modifier = Modifier.weight(0.1f))
+                    OutlinedTextField(
+                        value = newExp?.amount.toString() ?: " ",
+                        onValueChange = { viewModel.updateExp("amount", it)},
+                        modifier = Modifier.weight(0.3f),
+                        placeholder = { MediumText(text = "Amount")},
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions {
+                            isNewOpen = false
+                        }
+                    )
+                }
             }
         }
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)) {
+            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 80.dp)) {
             LazyColumn{
                 items(items = allExp!!) {
                     Row( modifier = Modifier.padding(horizontal = 20.dp) ) {
@@ -116,7 +139,7 @@ fun ViewAllExp(
             Spacer(modifier = Modifier.width(20.dp))
             MediumText(text = stringResource(id = R.string.total_text))
             Spacer(modifier = Modifier.weight(0.1f))
-            MediumText(text = viewModel.calTotal().second.toString())
+            MediumText(text = totalExp.toString())
             Spacer(modifier = Modifier.width(20.dp))
         }
     }

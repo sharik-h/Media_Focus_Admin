@@ -25,12 +25,19 @@ class mainViewModel @Inject constructor(
     val newExp = _newExp
     private var _newUser = MutableLiveData<User>()
     val newUser = _newUser
+    private val _totalBal = mutableStateOf(0)
+    val totalBal = _totalBal
+    private val _totalExp= mutableStateOf(0)
+    val totalExp = _totalExp
+    private val _totalPay= mutableStateOf(0)
+    val totalPay = _totalPay
 
 
     fun getMyDetails() {
         viewModelScope.launch {
             _payments.value = repo.getAllPayments()
             _expense.value = repo.getAllExp()
+            calTotal()
         }
     }
 
@@ -39,6 +46,16 @@ class mainViewModel @Inject constructor(
             _newExp.value?.let {
                 repo.addNewExp(it.desc!!, it.amount!!, it.date!!)
             }
+            clearExp()
+            _expense.value = repo.getAllExp()
+            calTotal()
+        }
+    }
+
+    private fun clearExp() {
+        _newExp.let {
+            it.value = it.value.copy(desc = "")
+            it.value = it.value.copy(amount = "")
         }
     }
 
@@ -67,5 +84,21 @@ class mainViewModel @Inject constructor(
         viewModelScope.launch {
             repo.sendNewPayment()
         }
+    }
+
+
+    fun calTotal(){
+        _totalPay.value = 0
+        _totalBal.value = 0
+        _totalExp.value = 0
+        _payments.value?.forEach { _totalPay.value += it.amount ?: 0 }
+        _expense.value?.forEach { _totalExp.value += it.amount?.toInt() ?: 0   }
+        println(_totalPay.value)
+        println(_totalExp.value)
+        _totalBal.value = _totalPay.value!! - _totalExp.value!!
+    }
+
+    fun isNewExpOk(): Boolean {
+      return  _newExp.value.desc != "" && newExp.value.amount != ""
     }
 }
