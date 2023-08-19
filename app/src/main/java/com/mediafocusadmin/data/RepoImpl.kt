@@ -1,6 +1,6 @@
 package com.mediafocusadmin.data
 
-import com.mediafocusadmin.model.CompactPayments
+import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.Expense
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,7 +13,7 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
         }
     }
 
-    override suspend fun getAllPayments(): List<CompactPayments> {
+    override suspend fun getAllPayments(): List<Payment> {
         return withContext(Dispatchers.IO){
             api.getAllPayments()
         }

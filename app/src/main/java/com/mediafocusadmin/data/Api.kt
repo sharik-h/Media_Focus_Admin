@@ -1,6 +1,6 @@
 package com.mediafocusadmin.data
 
-import com.mediafocusadmin.model.CompactPayments
+import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.Expense
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -13,7 +13,7 @@ interface Api {
     suspend fun getAllExp(): List<Expense>
 
     @GET("/getAllPayment")
-    suspend fun getAllPayments(): List<CompactPayments>
+    suspend fun getAllPayments(): List<Payment>
 
     @POST("/sendNewPayment")
     suspend fun sendNewPayment(): Boolean

@@ -1,11 +1,11 @@
 package com.mediafocusadmin.data
 
-import com.mediafocusadmin.model.CompactPayments
+import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.Expense
 
 interface Repo {
     suspend fun getAllExp(): List<Expense>
-    suspend fun getAllPayments(): List<CompactPayments>
+    suspend fun getAllPayments(): List<Payment>
     suspend fun sendNewPayment(): Boolean
     suspend fun addNewExp(desc: String, amount: String, date: String)
     suspend fun updateExp(id: Int, desc: String, amount: String, date: String)

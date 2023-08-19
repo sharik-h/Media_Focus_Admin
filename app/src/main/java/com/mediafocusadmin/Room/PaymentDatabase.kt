@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mediafocusadmin.model.CompactPayments
+import com.mediafocusadmin.model.Payment
 
-@Database(entities = [CompactPayments::class], version = 3, exportSchema = false)
+@Database(entities = [Payment::class], version = 4, exportSchema = false)
 abstract class PayRoomDatabase: RoomDatabase() {
     abstract val dao: PaymentDao
 

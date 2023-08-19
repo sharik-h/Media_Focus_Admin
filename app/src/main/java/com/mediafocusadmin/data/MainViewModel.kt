@@ -1,13 +1,13 @@
 package com.mediafocusadmin.data
 
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mediafocusadmin.Room.ExpenseRepo
 import com.mediafocusadmin.Room.PaymentRepo
-import com.mediafocusadmin.model.CompactPayments
 import com.mediafocusadmin.model.Expense
+import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,13 +22,13 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private var _payments = MutableLiveData<List<CompactPayments>>()
-    val payments: LiveData<List<CompactPayments>> = _payments
-    private var _expense = MutableLiveData<List<Expense>>()
-    val expense: LiveData<List<Expense>> = _expense
-    private var _newExp = MutableLiveData<Expense>()
-    val newExp = _newExp
-    private var _newUser = MutableLiveData<User>()
+    private var _payments :MutableLiveData<List<Payment>> = MutableLiveData()
+    val payments: MutableLiveData<List<Payment>> = _payments
+    private var _expense :MutableLiveData<List<Expense>> = MutableLiveData()
+    val expense: MutableLiveData<List<Expense>> = _expense
+    private var _newExp = mutableStateOf(Expense(0, "", "", ""))
+    var newExp = _newExp
+    private var _newUser = mutableStateOf(User(0,"","","",""))
     val newUser = _newUser
     private val _totalBal = mutableStateOf(0)
     val totalBal = _totalBal
@@ -42,10 +42,12 @@ class MainViewModel @Inject constructor(
         getMyDetailsFromRoom()
     }
 
-    private fun getMyDetails() {
+    private fun updateRoom() {
         viewModelScope.launch {
-            _payments.value = repo.getAllPayments()
-            _expense.value = repo.getAllExp()
+            repo.getAllPayments().forEach {
+                payRoomRepo.addNewPayment(it)
+            }
+            repo.getAllExp()
             calTotal()
         }
     }
@@ -157,30 +159,15 @@ class MainViewModel @Inject constructor(
 
     fun getMyDetailsFromRoom() {
         viewModelScope.launch {
-            val list = mutableListOf<Expense>()
-            roomRepo.getAllExp().forEach {
-                list.add(Expense(id = it.id, desc = it.desc, amount = it.amount, date = it.date))
-            }
-            val list2 = mutableListOf<CompactPayments>()
-            payRoomRepo.getAllPayments().forEach {
-                list.add(Expense(id = it.id, desc = it.userId!!, amount = it.amount.toString(), date = it.date!!))
-            }
-            _expense.value = list
-            _payments.value = list2
+            _expense.value = roomRepo.getAllExp()
+            _payments.value = payRoomRepo.getAllPayments()
         }
     }
 
     fun addNewExpIntoRoom() {
         viewModelScope.launch {
-            _newExp.value?.let {
-                updateExp("date", LocalDate.now().toString())
-                val exproom = Expense(
-                    desc =  it.desc!!,
-                    amount = it.amount!!,
-                    date = it.date!!
-                )
-                roomRepo.addNewExp(exproom)
-            }
+            updateExp("date", LocalDate.now().toString())
+            roomRepo.addNewExp(_newExp.value)
             clearExp()
             getMyDetailsFromRoom()
             calTotal()

@@ -76,9 +76,11 @@ fun ViewAllExp(
                 } },
             actions = {
                 IconButton(onClick = {
-                    if (viewModel.isNewExpOk()) { viewModel.addNewExpense() }
+                    if (viewModel.isNewExpOk()) {
+                        viewModel.addNewExpense()
+                        viewModel.addNewExpIntoRoom()
+                    }
                     isNewOpen = !isNewOpen
-                    println(viewModel.expense.value.toString())
                 }
                 ) {
                     Image(
