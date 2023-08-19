@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mediafocusadmin.Room.ExpenseRepo
+import com.mediafocusadmin.Room.PaymentRepo
 import com.mediafocusadmin.model.CompactPayments
 import com.mediafocusadmin.model.Expense
 import com.mediafocusadmin.model.User
@@ -14,7 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repo: RepoImpl
+    private val repo: RepoImpl,
+    private val roomRepo: ExpenseRepo,
+    private val payRoomRepo: PaymentRepo
 ) : ViewModel() {
 
 
@@ -35,7 +39,7 @@ class MainViewModel @Inject constructor(
 
 
     init {
-        getMyDetails()
+        getMyDetailsFromRoom()
     }
 
     private fun getMyDetails() {
@@ -148,6 +152,38 @@ class MainViewModel @Inject constructor(
             it.value = it.value.copy(phone = "")
             it.value = it.value.copy(email = "")
             it.value = it.value.copy(date = "")
+        }
+    }
+
+    fun getMyDetailsFromRoom() {
+        viewModelScope.launch {
+            val list = mutableListOf<Expense>()
+            roomRepo.getAllExp().forEach {
+                list.add(Expense(id = it.id, desc = it.desc, amount = it.amount, date = it.date))
+            }
+            val list2 = mutableListOf<CompactPayments>()
+            payRoomRepo.getAllPayments().forEach {
+                list.add(Expense(id = it.id, desc = it.userId!!, amount = it.amount.toString(), date = it.date!!))
+            }
+            _expense.value = list
+            _payments.value = list2
+        }
+    }
+
+    fun addNewExpIntoRoom() {
+        viewModelScope.launch {
+            _newExp.value?.let {
+                updateExp("date", LocalDate.now().toString())
+                val exproom = Expense(
+                    desc =  it.desc!!,
+                    amount = it.amount!!,
+                    date = it.date!!
+                )
+                roomRepo.addNewExp(exproom)
+            }
+            clearExp()
+            getMyDetailsFromRoom()
+            calTotal()
         }
     }
 }
