@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repo: RepoImpl,
-    private val roomRepo: ExpenseRepo,
+    private val expRoomRepo: ExpenseRepo,
     private val payRoomRepo: PaymentRepo
 ) : ViewModel() {
 
@@ -159,7 +159,7 @@ class MainViewModel @Inject constructor(
 
     fun getMyDetailsFromRoom() {
         viewModelScope.launch {
-            _expense.value = roomRepo.getAllExp()
+            _expense.value = expRoomRepo.getAllExp()
             _payments.value = payRoomRepo.getAllPayments()
         }
     }
@@ -167,7 +167,7 @@ class MainViewModel @Inject constructor(
     fun addNewExpIntoRoom() {
         viewModelScope.launch {
             updateExp("date", LocalDate.now().toString())
-            roomRepo.addNewExp(_newExp.value)
+            expRoomRepo.addNewExp(_newExp.value)
             clearExp()
             getMyDetailsFromRoom()
             calTotal()
