@@ -15,7 +15,7 @@ interface Api {
     @GET("/getAllPayment")
     suspend fun getAllPayments(): List<CompactPayments>
 
-    @POST("sendNewPayment")
+    @POST("/sendNewPayment")
     suspend fun sendNewPayment(): Boolean
 
     @POST("/addNewExp")
