@@ -133,12 +133,11 @@ class MainViewModel @Inject constructor(
       return  _newExp.value.desc != "" && newExp.value.amount != ""
     }
 
-    fun deleteExp(id: Int) {
+    fun deleteExp(expense: Expense) {
         viewModelScope.launch {
-            if (repo.deleteExp(id)){
-                _expense.value = repo.getAllExp()
-                calTotal()
-            }
+            expRoomRepo.deleteExp(expense)
+            calTotal()
+            getMyDetailsFromRoom()
         }
     }
 

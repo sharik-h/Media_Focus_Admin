@@ -1,7 +1,7 @@
 package com.mediafocusadmin.data
 
-import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.Expense
+import com.mediafocusadmin.model.Payment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,9 +25,9 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
         }
     }
 
-    override suspend fun addNewExp(desc: String, amount: String, date: String) {
+    override suspend fun addNewExp(id: Int,desc: String, amount: String, date: String) {
         withContext(Dispatchers.IO){
-            api.addNewExp(desc = desc, amount = amount, date = date)
+            api.addNewExp(id = id, desc = desc, amount = amount, date = date)
         }
     }
 

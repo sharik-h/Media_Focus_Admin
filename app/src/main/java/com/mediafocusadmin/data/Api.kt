@@ -1,7 +1,7 @@
 package com.mediafocusadmin.data
 
-import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.Expense
+import com.mediafocusadmin.model.Payment
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -20,6 +20,7 @@ interface Api {
 
     @POST("/addNewExp")
     suspend fun addNewExp(
+        @Query("id") id: Int,
         @Query("desc") desc: String,
         @Query("amount") amount: String,
         @Query("date") date: String

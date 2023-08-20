@@ -150,7 +150,7 @@ fun ViewAllExp(
                                 MediumText(text = item.amount.toString())
                                 Spacer(modifier = Modifier.weight(0.1f))
                                 IconButton(onClick = {
-                                    viewModel.deleteExp(item.id!!)
+                                    viewModel.deleteExp(item)
                                     open = false
                                 }) {
                                     Image(
