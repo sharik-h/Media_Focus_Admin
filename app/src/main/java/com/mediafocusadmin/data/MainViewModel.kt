@@ -133,8 +133,6 @@ class MainViewModel @Inject constructor(
         _totalExp.value = 0
         _payments.value?.forEach { _totalPay.value += it.amount ?: 0 }
         _expense.value?.forEach { _totalExp.value += it.amount?.toInt() ?: 0   }
-        println(_totalPay.value)
-        println(_totalExp.value)
         _totalBal.value = _totalPay.value!! - _totalExp.value!!
     }
 
