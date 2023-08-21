@@ -165,6 +165,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun getMyDetailsFromRoom() {
+        _expense.value = emptyList()
+        _payments.value = emptyList()
         viewModelScope.launch {
             _expense.value = expRoomRepo.getAllExp()
             _payments.value = payRoomRepo.getAllPayments()
