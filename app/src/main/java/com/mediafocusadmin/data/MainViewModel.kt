@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mediafocusadmin.NetwordkObserver.ConnectivityObserver
+import com.mediafocusadmin.NetwordkObserver.NetworkConnectivityObserver
 import com.mediafocusadmin.Room.ExpenseRepo
 import com.mediafocusadmin.Room.PaymentRepo
 import com.mediafocusadmin.model.Expense
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val repo: RepoImpl,
     private val expRoomRepo: ExpenseRepo,
-    private val payRoomRepo: PaymentRepo
+    private val payRoomRepo: PaymentRepo,
+    private val networkObserver: NetworkConnectivityObserver
 ) : ViewModel() {
 
 
@@ -36,18 +39,24 @@ class MainViewModel @Inject constructor(
     val totalExp = _totalExp
     private val _totalPay= mutableStateOf(0)
     val totalPay = _totalPay
-
+    val netObserve = networkObserver.observe()
 
     init {
+        viewModelScope.launch {
+            netObserve.collect { status ->
+                if (status == ConnectivityObserver.Status.Available) {
+                        updateRoom()
+                }
+            }
+        }
         getMyDetailsFromRoom()
     }
 
-    private fun updateRoom() {
+    fun updateRoom() {
         viewModelScope.launch {
             repo.getAllPayments().forEach {
                 payRoomRepo.addNewPayment(it)
             }
-            repo.getAllExp()
             calTotal()
         }
     }

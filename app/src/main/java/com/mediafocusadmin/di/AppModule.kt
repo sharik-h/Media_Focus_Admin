@@ -1,6 +1,7 @@
 package com.mediafocusadmin.di
 
 import android.content.Context
+import com.mediafocusadmin.NetwordkObserver.NetworkConnectivityObserver
 import com.mediafocusadmin.Room.ExpenseRepo
 import com.mediafocusadmin.Room.PayRoomDatabase
 import com.mediafocusadmin.Room.PaymentRepo
@@ -28,6 +29,12 @@ class AppModule {
             .baseUrl("")
             .build()
             .create(Api::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesNetworkObserver(@ApplicationContext context: Context): NetworkConnectivityObserver {
+        return NetworkConnectivityObserver(context)
     }
 
     @Provides

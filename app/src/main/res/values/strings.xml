@@ -15,4 +15,5 @@
     <string name="save_button_text">Save</string>
     <string name="delete_text">Delete</string>
     <string name="cancel_text">Cancel</string>
+    <string name="no_internet">No internet, some data may not be available</string>
 </resources>
