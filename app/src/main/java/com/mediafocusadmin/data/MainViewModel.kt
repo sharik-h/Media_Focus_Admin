@@ -116,6 +116,7 @@ class MainViewModel @Inject constructor(
             when(feildName){
                 "desc" -> it.value = it.value.copy(desc = value)
                 "amount" -> it.value = it.value.copy(amount = value)
+                "date" -> it.value = it.value.copy(date = value)
             }
         }
     }
