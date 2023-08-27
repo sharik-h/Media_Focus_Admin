@@ -87,7 +87,7 @@ fun ViewAllCollections(
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
-                    items(items = allCollections!!) {
+                    items(items = allCollections.filter { it.status }) {
                         Row(modifier = Modifier.padding(horizontal = 20.dp)) {
                             MediumText(text = it.userId ?: "")
                             Spacer(modifier = Modifier.weight(0.1f))
@@ -101,7 +101,7 @@ fun ViewAllCollections(
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
-                    items(items = allCollections!!) {
+                    items(items = allCollections.filter { !it.status }) {
                         Row(modifier = Modifier.padding(horizontal = 20.dp)) {
                             MediumText(text = it.userId ?: "")
                             Spacer(modifier = Modifier.weight(0.1f))

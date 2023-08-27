@@ -9,5 +9,6 @@ data class Payment(
     val id: Int = 0,
     val userId: String,
     val amount: Int,
-    val date: String
+    val date: String,
+    val status: Boolean
 )
