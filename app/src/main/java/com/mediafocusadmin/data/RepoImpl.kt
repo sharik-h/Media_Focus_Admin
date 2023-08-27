@@ -2,6 +2,7 @@ package com.mediafocusadmin.data
 
 import com.mediafocusadmin.model.Expense
 import com.mediafocusadmin.model.Payment
+import com.mediafocusadmin.model.UserResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -37,9 +38,9 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
         }
     }
 
-    override suspend fun addNewUser(name: String, phone: String, email: String, date: String) {
+    override suspend fun addNewUser(userId: String, name: String, phone: String, date: String, plan: String) {
         withContext(Dispatchers.IO){
-            api.addNewUser(name = name, phone = phone, email = email, date = date)
+            api.addNewUser(userId = userId, name = name, phone = phone, date = date, plan = plan)
         }
     }
 
@@ -60,4 +61,15 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
             api.deleteExp(id = id).toString() == "1"
         }
     }
+
+    override suspend fun getUnRegUsers(): UserResult {
+        return withContext(Dispatchers.IO){
+            try {
+                UserResult.Success(api.getUnRegUsers())
+            }catch (e: Exception) {
+                UserResult.Error(e.message.toString())
+            }
+        }
+    }
+
 }

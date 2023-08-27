@@ -2,6 +2,7 @@ package com.mediafocusadmin.data
 
 import com.mediafocusadmin.model.Expense
 import com.mediafocusadmin.model.Payment
+import com.mediafocusadmin.model.User
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -34,12 +35,13 @@ interface Api {
         @Query("date") date: String
     )
 
-    @POST("/addNewUser")
+    @POST("/updateAUser")
     suspend fun addNewUser(
+        @Query("userId") userId: String,
         @Query("name") name: String,
         @Query("phone") phone: String,
-        @Query("email") email: String,
         @Query("date") date: String,
+        @Query("plan") plan: String
     )
 
     @POST("/updateAUser")
@@ -53,5 +55,8 @@ interface Api {
 
     @DELETE("/removeExp")
     suspend fun deleteExp(@Query("id") id: Int): Int
+
+    @GET("getAllUnRegUsers")
+    suspend fun getUnRegUsers(): List<User>
 
 }

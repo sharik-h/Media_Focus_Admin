@@ -11,6 +11,7 @@ import com.mediafocusadmin.Room.PaymentRepo
 import com.mediafocusadmin.model.Expense
 import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.User
+import com.mediafocusadmin.model.UserResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -31,7 +32,7 @@ class MainViewModel @Inject constructor(
     val expense: MutableLiveData<List<Expense>> = _expense
     private var _newExp = mutableStateOf(Expense(0, "", "", ""))
     var newExp = _newExp
-    private var _newUser = mutableStateOf(User(0,"","","",""))
+    private var _newUser = mutableStateOf(User("","","","","", ""))
     val newUser = _newUser
     private val _totalBal = mutableStateOf(0)
     val totalBal = _totalBal
@@ -40,6 +41,8 @@ class MainViewModel @Inject constructor(
     private val _totalPay= mutableStateOf(0)
     val totalPay = _totalPay
     val netObserve = networkObserver.observe()
+    private val _unRegUsers: MutableLiveData<List<User>> = MutableLiveData()
+    val unRegUsers = _unRegUsers
 
     init {
         viewModelScope.launch {
@@ -83,12 +86,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _newUser.value?.let {
                 repo.addNewUser(
+                    userId = it.id,
                     name = it.name,
                     phone = it.phone,
-                    email = it.email,
-                    date = LocalDate.now().toString()
+                    date = LocalDate.now().toString(),
+                    plan = it.plan
                 )
             }
+            _unRegUsers.value = _unRegUsers.value?.filter { it.id == _newUser.value.id }
         }
     }
 
@@ -106,7 +111,7 @@ class MainViewModel @Inject constructor(
                 "name" -> it.value = it.value.copy(name = value)
                 "phone" -> it.value = it.value.copy(phone = value)
                 "email" -> it.value = it.value.copy(email = value)
-                "date" -> it.value = it.value.copy(date = value)
+                "plan" -> it.value = it.value.copy(plan = value)
             }
         }
     }
@@ -181,5 +186,31 @@ class MainViewModel @Inject constructor(
             getMyDetailsFromRoom()
             calTotal()
         }
+    }
+
+    fun getAllUnRegUsers() {
+        viewModelScope.launch {
+            val result = repo.getUnRegUsers()
+            when(result){
+                is UserResult.Success -> {
+                    _unRegUsers.value = result.data
+                }
+                is UserResult.Error -> {
+                    println(result.error)
+                }
+            }
+        }
+    }
+
+    fun setNewUser(userId: String) {
+        _unRegUsers.value?.forEach {
+            if (it.id == userId){
+                _newUser.value = it
+            }
+        }
+    }
+
+    fun clearNewUser1() {
+        _newUser.value = User("","", "", "","","")
     }
 }

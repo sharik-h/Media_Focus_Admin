@@ -64,7 +64,10 @@ fun MainPage(
                         contentDescription = stringResource(id = R.string.main_page_payment_action_desc)
                     )
                 }
-                IconButton(onClick = { navController.navigate(Screen.newUserPage.route) }) {
+                IconButton(onClick = {
+                    viewModel.getAllUnRegUsers()
+                    navController.navigate(Screen.newUserPage.route)
+                }) {
                     Image(
                         imageVector = Icons.Default.AddCircle,
                         contentDescription = stringResource(id = R.string.main_page_heading)
