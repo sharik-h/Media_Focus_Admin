@@ -67,17 +67,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addNewExpense() {
-        viewModelScope.launch {
-            _newExp.value?.let {
-                repo.addNewExp(it.desc!!, it.amount!!, LocalDate.now().toString())
-            }
-            clearExp()
-            _expense.value = repo.getAllExp()
-            calTotal()
-        }
-    }
-
     private fun clearExp() {
         _newExp.let {
             it.value = it.value.copy(desc = "")
@@ -97,14 +86,6 @@ class MainViewModel @Inject constructor(
                 )
             }
             _unRegUsers.value = _unRegUsers.value?.filter { it.id == _newUser.value.id }
-        }
-    }
-
-    fun updateExp() {
-        viewModelScope.launch {
-            _newExp.value?.let {
-                repo.updateExp(it.id!!, it.desc!!, it.amount!!, it.date!!)
-            }
         }
     }
 
@@ -155,12 +136,6 @@ class MainViewModel @Inject constructor(
             calTotal()
             getMyDetailsFromRoom()
         }
-    }
-
-    fun isNewUserOk(): Boolean {
-        return     _newUser.value.name != ""
-                && _newUser.value.phone != ""
-                && _newUser.value.email != ""
     }
 
     fun clearNewUser() {
@@ -224,10 +199,6 @@ class MainViewModel @Inject constructor(
                 _newUser.value = it
             }
         }
-    }
-
-    fun clearNewUser1() {
-        _newUser.value = User("","", "", "","","")
     }
 
     fun updateUserData(user: User) {
