@@ -65,7 +65,6 @@ fun MainPage(
                     )
                 }
                 IconButton(onClick = {
-                    viewModel.getAllUnRegUsers()
                     navController.navigate(Screen.newUserPage.route)
                 }) {
                     Image(

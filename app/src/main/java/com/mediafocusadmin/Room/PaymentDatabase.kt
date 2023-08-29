@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.mediafocusadmin.model.Payment
 
-@Database(entities = [Payment::class], version = 4, exportSchema = false)
+@Database(entities = [Payment::class], version = 5, exportSchema = false)
 abstract class PayRoomDatabase: RoomDatabase() {
     abstract val dao: PaymentDao
 
