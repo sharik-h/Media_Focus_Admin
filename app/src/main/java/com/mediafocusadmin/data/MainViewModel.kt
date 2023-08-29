@@ -60,8 +60,14 @@ class MainViewModel @Inject constructor(
 
     fun updateRoom() {
         viewModelScope.launch {
-            repo.getAllPayments().forEach {
-                payRoomRepo.addNewPayment(it)
+            try {
+                repo.getAllPayments().forEach {
+                    payRoomRepo.addNewPayment(it)
+                }
+                getAllRegUsers()
+                getAllUnRegUsers()
+            }catch (e: Exception) {
+                println(e.message)
             }
             calTotal()
         }
@@ -166,7 +172,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getAllUnRegUsers() {
+    private fun getAllUnRegUsers() {
         viewModelScope.launch {
             val result = repo.getUnRegUsers()
             when(result){
