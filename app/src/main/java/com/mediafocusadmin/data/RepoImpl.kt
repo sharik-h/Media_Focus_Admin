@@ -72,4 +72,13 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
         }
     }
 
+    override suspend fun getAllRegUsers(): UserResult {
+        return withContext(Dispatchers.IO){
+            try {
+                UserResult.Success(api.getAllRegUsers())
+            }catch (e: Exception) {
+                UserResult.Error(e.message.toString())
+            }
+        }
+    }
 }

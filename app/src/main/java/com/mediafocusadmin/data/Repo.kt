@@ -14,4 +14,5 @@ interface Repo {
     suspend fun updateUser(id: Int, name: String, phone: String, email: String, date: String)
     suspend fun deleteExp(id: Int): Boolean
     suspend fun getUnRegUsers(): UserResult
+    suspend fun getAllRegUsers(): UserResult
 }

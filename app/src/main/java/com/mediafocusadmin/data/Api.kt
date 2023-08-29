@@ -59,4 +59,7 @@ interface Api {
     @GET("getAllUnRegUsers")
     suspend fun getUnRegUsers(): List<User>
 
+    @GET("getAllRegUsers")
+    suspend fun getAllRegUsers(): List<User>
+
 }

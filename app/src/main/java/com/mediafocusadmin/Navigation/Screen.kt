@@ -5,4 +5,5 @@ sealed class Screen(val route: String) {
     object newUserPage: Screen(route = "newUserPage")
     object viewAllExpPage: Screen(route = "viewAllExpPage")
     object viewAllCollectionPage: Screen(route = "viewAllCollectionPage")
+    object allUserPage: Screen(route = "allUserPage")
 }

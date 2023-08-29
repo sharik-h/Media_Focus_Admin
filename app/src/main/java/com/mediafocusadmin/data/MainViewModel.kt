@@ -43,6 +43,8 @@ class MainViewModel @Inject constructor(
     val netObserve = networkObserver.observe()
     private val _unRegUsers: MutableLiveData<List<User>> = MutableLiveData()
     val unRegUsers = _unRegUsers
+    private val _allRegUsers: MutableLiveData<List<User>> = MutableLiveData()
+    val allRegUsers = _allRegUsers
 
     init {
         viewModelScope.launch {
@@ -202,6 +204,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun getAllRegUsers() {
+        viewModelScope.launch {
+            val result = repo.getAllRegUsers()
+            when(result){
+                is UserResult.Success -> {
+                    _allRegUsers.value = result.data
+                }
+                is UserResult.Error -> {
+                    println(result.error)
+                }
+            }
+        }
+    }
     fun setNewUser(userId: String) {
         _unRegUsers.value?.forEach {
             if (it.id == userId){
