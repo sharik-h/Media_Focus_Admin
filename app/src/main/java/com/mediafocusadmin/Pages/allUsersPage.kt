@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -131,29 +132,32 @@ fun viewUser(user: User, onclick: () -> Unit) {
 
 @Composable
 fun editUser(user: User, viewModel: MainViewModel, onCancel: () -> Unit) {
+
+    var editedUser by remember { mutableStateOf(user) }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)) {
 
         OutlinedTextField(
-            value = user?.name ?: "",
-            onValueChange = { viewModel.updateUser("name", it) },
+            value = editedUser?.name ?: "",
+            onValueChange = { editedUser = editedUser.copy(name = it) },
             textStyle = MaterialTheme.typography.labelMedium,
             placeholder = { MediumText(text = "Name")},
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = user?.email ?: "",
-            onValueChange = { viewModel.updateUser("email", it) },
+            value = editedUser?.email ?: "",
+            onValueChange = { editedUser = editedUser.copy(email = it) },
             textStyle = MaterialTheme.typography.labelMedium,
             placeholder = { MediumText(text = "E-mail")},
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = user?.phone ?: "",
-            onValueChange = { viewModel.updateUser("phone", it) },
+            value = editedUser?.phone ?: "",
+            onValueChange = { editedUser = editedUser.copy(phone = it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             textStyle = MaterialTheme.typography.labelMedium,
             placeholder = { MediumText(text = "Phone")},
@@ -161,28 +165,31 @@ fun editUser(user: User, viewModel: MainViewModel, onCancel: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = user?.plan ?: "",
-            onValueChange = { viewModel.updateUser("plan", it)},
+            value = editedUser?.plan ?: "",
+            onValueChange = { editedUser = editedUser.copy(plan = it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             textStyle = MaterialTheme.typography.labelMedium,
             placeholder = { MediumText(text = "Plan")},
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Button(
-            onClick = {
-                if (viewModel.isNewUserOk()){
-                    viewModel.addNewUser()
-                }
-                viewModel.clearNewUser()
-                onCancel()
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            if(viewModel.isNewUserOk()){
-                MediumText(text = stringResource(id = R.string.save_button_text))
-            }else {
+        Row(Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { onCancel() },
+                modifier = Modifier.fillMaxWidth(0.5f)
+            ) {
                 MediumText(text = stringResource(id = R.string.cancel_text))
+            }
+            Spacer(modifier = Modifier.width(5.dp))
+            Button(
+                onClick = {
+                   viewModel.updateUserData(editedUser)
+                    onCancel()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = editedUser.isEverythingOk() && user != editedUser
+            ) {
+                MediumText(text = stringResource(id = R.string.save_button_text))
             }
         }
     }
@@ -193,8 +200,8 @@ fun searchView(user: User) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 10.dp, vertical = 5.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         Text(text = "${user.name}, ${user.phone}", style = MaterialTheme.typography.labelLarge)
         Spacer(modifier = Modifier.weight(0.1f))

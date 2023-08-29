@@ -135,7 +135,7 @@ fun newUser(user: User, viewModel: MainViewModel, onclick: () -> Unit) {
         Spacer(modifier = Modifier.height(10.dp))
         Button(
             onClick = {
-                if (viewModel.isNewUserOk()){
+                if (user.isEverythingOk()){
                     viewModel.addNewUser()
                 }
                 viewModel.clearNewUser()
@@ -143,7 +143,7 @@ fun newUser(user: User, viewModel: MainViewModel, onclick: () -> Unit) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            if(viewModel.isNewUserOk()){
+            if(user.isEverythingOk()){
                 MediumText(text = stringResource(id = R.string.save_button_text))
             }else {
                 MediumText(text = stringResource(id = R.string.cancel_text))

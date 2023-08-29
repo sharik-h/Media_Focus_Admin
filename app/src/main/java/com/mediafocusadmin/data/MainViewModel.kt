@@ -13,6 +13,7 @@ import com.mediafocusadmin.model.Payment
 import com.mediafocusadmin.model.User
 import com.mediafocusadmin.model.UserResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -227,5 +228,15 @@ class MainViewModel @Inject constructor(
 
     fun clearNewUser1() {
         _newUser.value = User("","", "", "","","")
+    }
+
+    fun updateUserData(user: User) {
+        viewModelScope.launch {
+            user.let {
+                repo.updateUser(id = it.id,name = it.name,phone = it.phone,email = it.phone,plan = it.plan)
+            }
+            delay(1000)
+            getAllRegUsers()
+        }
     }
 }

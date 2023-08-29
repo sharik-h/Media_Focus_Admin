@@ -7,7 +7,11 @@ data class User(
     var email: String,
     var date: String,
     var plan: String,
-)
+) {
+    fun isEverythingOk(): Boolean {
+        return name.isNotEmpty() && phone.isNotEmpty() && email.isNotEmpty() && date.isNotEmpty() && plan.isNotEmpty()
+    }
+}
 
 sealed class UserResult {
     data class Success(val data: List<User>): UserResult()

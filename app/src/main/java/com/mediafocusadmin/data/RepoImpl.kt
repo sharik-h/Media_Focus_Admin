@@ -45,14 +45,14 @@ class RepoImpl @Inject constructor(private val api: Api) : Repo {
     }
 
     override suspend fun updateUser(
-        id: Int,
+        id: String,
         name: String,
         phone: String,
         email: String,
-        date: String
+        plan: String,
     ) {
         withContext(Dispatchers.IO){
-            api.updateUser(id = id, name = name, phone = phone, email = email, date = date)
+            api.updateUser(id = id, name = name, phone = phone, email = email, plan = plan)
         }
     }
 

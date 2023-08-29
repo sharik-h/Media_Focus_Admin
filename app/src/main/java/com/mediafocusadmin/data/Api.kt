@@ -46,11 +46,11 @@ interface Api {
 
     @POST("/updateAUser")
     suspend fun updateUser(
-        @Query("id") id: Int,
+        @Query("userId") id: String,
         @Query("name") name: String,
         @Query("phone") phone: String,
         @Query("email") email: String,
-        @Query("date") date: String,
+        @Query("plan") plan: String,
     )
 
     @DELETE("/removeExp")
