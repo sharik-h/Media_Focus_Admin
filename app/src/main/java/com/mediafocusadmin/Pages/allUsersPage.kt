@@ -1,6 +1,7 @@
 package com.mediafocusadmin.Pages
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -31,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,20 +43,29 @@ import androidx.compose.ui.unit.dp
 import com.mediafocusadmin.R
 import com.mediafocusadmin.data.MainViewModel
 import com.mediafocusadmin.model.User
+import kotlinx.coroutines.launch
 
 @Composable
 fun allUsersPage(viewModel: MainViewModel, paddingValues: PaddingValues) {
 
     val all by viewModel.allRegUsers.observeAsState(initial = emptyList())
     var isSearchOpen by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
     Column {
 
             if (isSearchOpen){
-                searchBar(close = { isSearchOpen = false}, onSearch = { }, allUsers = all)
+                searchBar(close = {
+                    isSearchOpen = false
+                    scope.launch { listState.animateScrollToItem(it) }
+                                  },
+                    onSearch = { },
+                    allUsers = all)
             }else{
                 topAppBar( onclick = { isSearchOpen = true} )
             }
-        LazyColumn(modifier = Modifier.padding(paddingValues)){
+        LazyColumn(state = listState, modifier = Modifier.padding(paddingValues)){
             items(items = all){
                 var open by remember{ mutableStateOf(false) }
                 if (open){
@@ -69,7 +81,7 @@ fun allUsersPage(viewModel: MainViewModel, paddingValues: PaddingValues) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun searchBar(close: () -> Unit, onSearch: (String ) -> Unit, allUsers: List<User>) {
+fun searchBar(close: (Int) -> Unit, onSearch: (String ) -> Unit, allUsers: List<User>) {
 
     var srch by remember { mutableStateOf("") }
     var all = allUsers
@@ -84,7 +96,7 @@ fun searchBar(close: () -> Unit, onSearch: (String ) -> Unit, allUsers: List<Use
         placeholder = { MediumText(text = "Name or Number") },
         active = true ,
         trailingIcon = {
-                       IconButton(onClick = { close() }) {
+                       IconButton(onClick = { close(0) }) {
                            Image(imageVector = Icons.Default.Close, contentDescription = null)
                        }
         },
@@ -92,7 +104,7 @@ fun searchBar(close: () -> Unit, onSearch: (String ) -> Unit, allUsers: List<Use
     )  {
         LazyColumn{
             items(items = allUsers.filter { it.name.contains(srch) || it.phone.contains(srch) }) {
-                searchView(user = it)
+                searchView(user = it, onclick = { close(allUsers.indexOf(it)) })
             }
         }
     }
@@ -196,12 +208,13 @@ fun editUser(user: User, viewModel: MainViewModel, onCancel: () -> Unit) {
 }
 
 @Composable
-fun searchView(user: User) {
+fun searchView(user: User, onclick: (User) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 5.dp)
+            .clickable { onclick(user) }
     ) {
         Text(text = "${user.name}, ${user.phone}", style = MaterialTheme.typography.labelLarge)
         Spacer(modifier = Modifier.weight(0.1f))
